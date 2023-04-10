@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+   docker_drupal:
+      image: drupal:latest
+      environment:
+         MYSQL_USERNAME: root
+         MYSQL_PASSWORD: password
+      depends_on:
+         - mysql
+
+   mysql:
+      image: mysql:latest
+      environment:
+         MYSQL_ROOT_PASSWORD: password
+         MYSQL_DATABASE: drupal-db
+      networks:
+         - drupal-network
+
+networks:
+   drupal-network:
