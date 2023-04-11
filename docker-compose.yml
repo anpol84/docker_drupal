@@ -2,7 +2,13 @@ version: '3'
 
 services:
    docker_drupal:
-      image: drupal:latest
+
+      build: .
+      ports:
+         - '8082:8082'
+      restart: always
+      networks:
+         - drupal-network
       environment:
          MYSQL_USERNAME: root
          MYSQL_PASSWORD: password
@@ -11,11 +17,20 @@ services:
 
    mysql:
       image: mysql:latest
+      command: mysqld --port=3308
+      ports:
+         - '3308:3308'
       environment:
          MYSQL_ROOT_PASSWORD: password
          MYSQL_DATABASE: drupal-db
+      restart: always
       networks:
          - drupal-network
+      volumes:
+         - mysql:/var/lib/mysql
 
 networks:
    drupal-network:
+      driver: bridge
+volumes:
+   mysql:
